@@ -54,3 +54,28 @@ vim.api.nvim_create_autocmd('LspAttach', {
 	end,
 })
 vim.opt.completeopt = {"menu", "menuone", "noselect"}
+
+-- Autocomplete tab insert
+local function has_words_before()
+	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+	if col == 0 then return false end
+	local text = vim.api.nvim_get_current_line()
+	return text:sub(col, col):match("%s") == nil
+end
+
+vim.keymap.set("i", "<Tab>", function()
+	if vim.fn.pumvisible() == 1 then
+		return "<C-n>"
+	elseif has_words_before() then
+		return "<C-x><C-o>"
+	else
+		return "<Tab>"
+	end
+end, { expr = true })
+vim.keymap.set("i", "<S-Tab>", function()
+	if vim.fn.pumvisible() == 1 then
+		return "<C-p>"
+	else
+		return "<S-Tab>"
+	end
+end, { expr = true })
