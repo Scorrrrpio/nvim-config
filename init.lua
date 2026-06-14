@@ -36,3 +36,21 @@ vim.lsp.config('ty', {
 	root_markers = { 'uv.lock', 'pyproject.toml', '.git' },
 })
 vim.lsp.enable('ty')
+
+-- LSP autocomplete
+vim.api.nvim_create_autocmd('LspAttach', {
+	callback = function(args)
+		local client = vim.lsp.get_client_by_id(args.data.client_id)
+		if not client then return end
+
+		if client:supports_method("textDocument/completion") then
+			vim.lsp.completion.enable(true, args.data.client_id, args.buf, {
+				autotrigger = true,
+				convert = function(item)
+					return item
+				end,
+			})
+		end
+	end,
+})
+vim.opt.completeopt = {"menu", "menuone", "noselect"}
