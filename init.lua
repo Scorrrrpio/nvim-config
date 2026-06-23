@@ -37,6 +37,14 @@ vim.lsp.config('ty', {
 })
 vim.lsp.enable('ty')
 
+-- Go LSP
+vim.lsp.config('gopls', {
+	cmd = {'gopls'},
+	filetypes = { 'go' },
+	root_markers = { 'go.mod', '.git' },
+})
+vim.lsp.enable('gopls')
+
 -- LSP autocomplete
 vim.api.nvim_create_autocmd('LspAttach', {
 	callback = function(args)
